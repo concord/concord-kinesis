@@ -34,16 +34,9 @@ public class RecordProcessor implements IRecordProcessor {
       try {
         recordQueue.put(record);
         checkpointer.checkpoint(record);
-      } catch(InterruptedException e) {
-        // recordQueue put
+      } catch(InterruptedException | InvalidStateException
+              | ShutdownException e) {
         Throwables.propagate(e);
-      } catch(InvalidStateException e) {
-        // checkpointer
-        Throwables.propagate(e);
-      } catch(ShutdownException e) {
-        // checkpointer
-        logger.error("Shutting down Kinesis consumer");
-        break;
       }
     }
   }
