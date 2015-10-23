@@ -8,6 +8,7 @@ megajar and configuring a task deployment.
 Downloading
 -----------
 The latest release can be found at the following URL:
+https://storage.googleapis.com/concord-release/concord_kinesis_consumer-0.1.0.jar
 
 Running
 -------
