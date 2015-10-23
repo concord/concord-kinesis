@@ -8,7 +8,7 @@ settings(
   scalacOptions ++= Seq("-feature", "-language:higherKinds"),
   libraryDependencies ++= Seq(
     "io.concord" % "concord" % "0.1.0",
-    "io.concord" % "rawapi" % "0.1.0",
+    "io.concord" % "rawapi" % "0.1.1",
     "com.amazonaws" % "amazon-kinesis-client" % "1.6.1",
     "com.beust" % "jcommander" % "1.48",
     "com.google.guava" % "guava" % "19.0-rc2",
