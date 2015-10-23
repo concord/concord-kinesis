@@ -65,7 +65,7 @@ public class Consumer extends Computation implements Runnable {
   public Metadata metadata() {
     HashSet<String> os = new HashSet<String>();
     for (byte[] o : ostreams) {
-      os.add(new String(o));
+      os.add(new String(o, "UTF-8"));
     }
 
     return new Metadata(name,
