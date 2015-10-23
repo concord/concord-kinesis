@@ -11,6 +11,7 @@ import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
 import com.concord.kinesis.utils.Options;
 import com.google.common.base.Throwables;
 import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.UncaughtExceptionHandlers;
 
 public class Consumer extends Computation implements Runnable {
   private final ArrayBlockingQueue<Record> recordQueue;
@@ -65,7 +66,7 @@ public class Consumer extends Computation implements Runnable {
   public Metadata metadata() {
     HashSet<String> os = new HashSet<String>();
     for (byte[] o : ostreams) {
-      os.add(new String(o, "UTF-8"));
+      os.add(new String(o));
     }
 
     return new Metadata(name,
@@ -79,6 +80,11 @@ public class Consumer extends Computation implements Runnable {
   }
 
   public static void main(String[] args) {
+    Thread.currentThread().setUncaughtExceptionHandler(
+        UncaughtExceptionHandlers.systemExit());
+    Thread.setDefaultUncaughtExceptionHandler(
+        UncaughtExceptionHandlers.systemExit());
+
     Options opts = Options.parse(args);
 
     ArrayBlockingQueue<Record> recordQueue =
