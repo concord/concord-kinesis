@@ -22,7 +22,7 @@ DerivePointerBinding: false
 IndentCaseLabels: false
 IndentFunctionDeclarationAfterType: false
 IndentWidth: 2
-Language: Cpp
+Language: Java
 MaxEmptyLinesToKeep: 2
 NamespaceIndentation: None
 ObjCSpaceAfterProperty: true

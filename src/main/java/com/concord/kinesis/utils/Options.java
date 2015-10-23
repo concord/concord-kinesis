@@ -46,8 +46,8 @@ public class Options {
 
   public KinesisClientLibConfiguration getKinesisConfiguration() {
     return new KinesisClientLibConfiguration(
-        name, topic, getCredentialsProvider(),
-        name + "-" + UUID.randomUUID().toString());
+      name, topic, getCredentialsProvider(),
+      name + "-" + UUID.randomUUID().toString());
   }
 
   public static Options parse(String[] argv) {

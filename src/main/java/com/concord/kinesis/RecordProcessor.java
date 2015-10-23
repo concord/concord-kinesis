@@ -30,17 +30,17 @@ public class RecordProcessor implements IRecordProcessor {
   @Override
   public void processRecords(List<Record> records,
                              IRecordProcessorCheckpointer checkpointer) {
-    for (Record record : records) {
+    for(Record record : records) {
       try {
         recordQueue.put(record);
         checkpointer.checkpoint(record);
-      } catch (InterruptedException e) {
+      } catch(InterruptedException e) {
         // recordQueue put
         Throwables.propagate(e);
-      } catch (InvalidStateException e) {
+      } catch(InvalidStateException e) {
         // checkpointer
         Throwables.propagate(e);
-      } catch (ShutdownException e) {
+      } catch(ShutdownException e) {
         // checkpointer
         logger.error("Shutting down Kinesis consumer");
         break;

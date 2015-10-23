@@ -28,7 +28,7 @@ public class Consumer extends Computation implements Runnable {
     Preconditions.checkNotNull(name);
 
     recordQueue = rq;
-    for (String o : os) {
+    for(String o : os) {
       ostreams.add(o.getBytes());
     }
     this.name = name;
@@ -44,17 +44,17 @@ public class Consumer extends Computation implements Runnable {
   public void processTimer(ComputationContext ctx, String key, long time) {
     com.amazonaws.services.kinesis.model.Record r;
     int recordsRead = 0;
-    while ((r = recordQueue.poll()) != null) {
+    while((r = recordQueue.poll()) != null) {
       recordsRead++;
 
-      for (byte[] stream : ostreams) {
+      for(byte[] stream : ostreams) {
         ctx.produceRecord(stream, r.getPartitionKey().getBytes(),
                           r.getData().array());
       }
     }
 
     time = System.currentTimeMillis();
-    if (recordsRead == 0) {
+    if(recordsRead == 0) {
       time += 50;
     }
     ctx.setTimer(key, time);
@@ -70,10 +70,10 @@ public class Consumer extends Computation implements Runnable {
   @Override
   public Metadata metadata() {
     HashSet<String> os = new HashSet<String>();
-    for (byte[] o : ostreams) {
+    for(byte[] o : ostreams) {
       try {
         os.add(new String(o, "UTF-8"));
-      } catch (UnsupportedEncodingException e) {
+      } catch(UnsupportedEncodingException e) {
         Throwables.propagate(e);
       }
     }
@@ -84,22 +84,23 @@ public class Consumer extends Computation implements Runnable {
 
   @Override
   public void run() {
+    logger.info("Starting computation service");
     ServeComputation.serve(this);
   }
 
   public static void main(String[] args) {
     Thread.currentThread().setUncaughtExceptionHandler(
-        UncaughtExceptionHandlers.systemExit());
+      UncaughtExceptionHandlers.systemExit());
     Thread.setDefaultUncaughtExceptionHandler(
-        UncaughtExceptionHandlers.systemExit());
+      UncaughtExceptionHandlers.systemExit());
 
     Options opts = Options.parse(args);
 
     ArrayBlockingQueue<Record> recordQueue =
-        new ArrayBlockingQueue<Record>(opts.getQueueSize());
+      new ArrayBlockingQueue<Record>(opts.getQueueSize());
 
     Consumer consumer =
-        new Consumer(recordQueue, opts.getOstreams(), opts.getName());
+      new Consumer(recordQueue, opts.getOstreams(), opts.getName());
 
     Thread consumerThread = new Thread(consumer);
 
@@ -113,7 +114,7 @@ public class Consumer extends Computation implements Runnable {
       workerThread.start();
       workerThread.join();
       consumerThread.join();
-    } catch (InterruptedException e) {
+    } catch(InterruptedException e) {
       System.exit(1);
     }
   }
