@@ -2,9 +2,9 @@ package com.concord.kinesis.utils;
 
 import com.amazonaws.auth.AWSCredentials;
 
-public class Credentials implements AWSCredentials {
-  private String key;
-  private String secret;
+public final class Credentials implements AWSCredentials {
+  private final String key;
+  private final String secret;
 
   public Credentials(String key, String secret) {
     this.key = key;
