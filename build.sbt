@@ -9,7 +9,8 @@ settings(
     "io.concord" % "concord" % "0.1.0",
     "io.concord" % "rawapi" % "0.1.0",
     "com.amazonaws" % "amazon-kinesis-client" % "1.6.1",
-    "com.beust" % "jcommander" % "1.48"
+    "com.beust" % "jcommander" % "1.48",
+    "com.google.guava" % "guava" % "19.0-rc2"
     ),
   assemblyMergeStrategy in assembly := {
     case x if x.endsWith("project.clj") => MergeStrategy.discard // Leiningen build files
