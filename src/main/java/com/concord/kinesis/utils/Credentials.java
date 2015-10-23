@@ -15,10 +15,12 @@ public final class Credentials implements AWSCredentials {
   }
 
   @Override
-  public String getAWSAccessKeyId() { return key; }
+  public String getAWSAccessKeyId() {
+    return key;
+  }
 
   @Override
-  public String getAWSSecretKey() { return secret; }
+  public String getAWSSecretKey() {
+    return secret;
+  }
 }
-
-

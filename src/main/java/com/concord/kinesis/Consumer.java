@@ -6,10 +6,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.UnsupportedEncodingException;
 import com.amazonaws.services.kinesis.model.Record;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
 import com.concord.kinesis.utils.Options;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.UncaughtExceptionHandlers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +48,8 @@ public class Consumer extends Computation implements Runnable {
       recordsRead++;
 
       for (byte[] stream : ostreams) {
-        ctx.produceRecord(stream,
-            r.getPartitionKey().getBytes(),
-            r.getData().array());
+        ctx.produceRecord(stream, r.getPartitionKey().getBytes(),
+                          r.getData().array());
       }
     }
 
@@ -70,12 +71,15 @@ public class Consumer extends Computation implements Runnable {
   public Metadata metadata() {
     HashSet<String> os = new HashSet<String>();
     for (byte[] o : ostreams) {
-      os.add(new String(o));
+      try {
+        os.add(new String(o, "UTF-8"));
+      } catch (UnsupportedEncodingException e) {
+        Throwables.propagate(e);
+      }
     }
 
-    return new Metadata(name,
-        new HashSet<StreamTuple>(),
-        new HashSet<String>(os));
+    return new Metadata(name, new HashSet<StreamTuple>(),
+                        new HashSet<String>(os));
   }
 
   @Override
@@ -92,12 +96,10 @@ public class Consumer extends Computation implements Runnable {
     Options opts = Options.parse(args);
 
     ArrayBlockingQueue<Record> recordQueue =
-      new ArrayBlockingQueue<Record>(opts.getQueueSize());
+        new ArrayBlockingQueue<Record>(opts.getQueueSize());
 
-    Consumer consumer = new Consumer(
-        recordQueue,
-        opts.getOstreams(),
-        opts.getName());
+    Consumer consumer =
+        new Consumer(recordQueue, opts.getOstreams(), opts.getName());
 
     Thread consumerThread = new Thread(consumer);
 
@@ -116,4 +118,3 @@ public class Consumer extends Computation implements Runnable {
     }
   }
 }
-

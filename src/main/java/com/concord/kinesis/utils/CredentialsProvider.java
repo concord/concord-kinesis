@@ -21,4 +21,3 @@ public class CredentialsProvider implements AWSCredentialsProvider {
   @Override
   public void refresh() {}
 }
-

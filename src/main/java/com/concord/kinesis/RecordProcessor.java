@@ -18,9 +18,7 @@ public class RecordProcessor implements IRecordProcessor {
   private String shardId;
   private final Logger logger = LoggerFactory.getLogger(RecordProcessor.class);
 
-  public RecordProcessor(BlockingQueue<Record> rq) {
-    recordQueue = rq;
-  }
+  public RecordProcessor(BlockingQueue<Record> rq) { recordQueue = rq; }
 
   @Override
   public void initialize(String shardId) {
@@ -57,4 +55,3 @@ public class RecordProcessor implements IRecordProcessor {
     System.exit(1);
   }
 }
-
