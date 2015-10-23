@@ -8,6 +8,8 @@ import com.amazonaws.services.kinesis.model.Record;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import com.amazonaws.services.kinesis.clientlibrary.exceptions.*;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Throwables;
 
 public class RecordProcessor implements IRecordProcessor {
   private BlockingQueue<Record> recordQueue;
@@ -19,6 +21,7 @@ public class RecordProcessor implements IRecordProcessor {
 
   @Override
   public void initialize(String shardId) {
+    Preconditions.checkNotNull(shardId);
     System.err.println("Initialized processor on shard id: " + shardId);
     this.shardId = shardId;
   }
@@ -32,10 +35,10 @@ public class RecordProcessor implements IRecordProcessor {
         checkpointer.checkpoint(record);
       } catch (InterruptedException e) {
         // recordQueue put
-        System.err.println("Process interrupted while emitting record");
+        Throwables.propagate(e);
       } catch (InvalidStateException e) {
         // checkpointer
-        System.err.println("Kinesis consumer reached invalid state");
+        Throwables.propagate(e);
       } catch (ShutdownException e) {
         // checkpointer
         System.err.println("Shutting down kinesis consumer");
@@ -48,6 +51,7 @@ public class RecordProcessor implements IRecordProcessor {
   public void shutdown(IRecordProcessorCheckpointer checkpointer,
                        ShutdownReason reason) {
     System.out.println("Shutting down Kinesis consumer for shard: " + shardId);
+    System.exit(1);
   }
 }
 
