@@ -2,11 +2,14 @@ package com.concord.kinesis.utils;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.google.common.base.Preconditions;
 
 public class CredentialsProvider implements AWSCredentialsProvider {
-  Credentials credentials = null;
+  private final Credentials credentials;
 
   public CredentialsProvider(String key, String secret) {
+    Preconditions.checkNotNull(key);
+    Preconditions.checkNotNull(secret);
     credentials = new Credentials(key, secret);
   }
 
@@ -18,4 +21,3 @@ public class CredentialsProvider implements AWSCredentialsProvider {
   @Override
   public void refresh() {}
 }
-
