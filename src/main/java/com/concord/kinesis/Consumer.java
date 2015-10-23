@@ -11,9 +11,9 @@ import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
 import com.concord.kinesis.utils.Options;
 
 public class Consumer extends Computation implements Runnable {
-  private ArrayBlockingQueue<Record> recordQueue;
-  private ArrayList<byte[]> ostreams = new ArrayList<byte[]>();
-  private String name;
+  private final ArrayBlockingQueue<Record> recordQueue;
+  private final ArrayList<byte[]> ostreams = new ArrayList<byte[]>();
+  private final String name;
 
   public Consumer(ArrayBlockingQueue<Record> rq, List<String> os, String name) {
     recordQueue = rq;
