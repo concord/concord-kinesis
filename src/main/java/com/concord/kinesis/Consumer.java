@@ -9,7 +9,6 @@ import java.util.List;
 import com.amazonaws.services.kinesis.model.Record;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
 import com.concord.kinesis.utils.Options;
-import com.google.common.base.Throwables;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.UncaughtExceptionHandlers;
 
@@ -108,7 +107,7 @@ public class Consumer extends Computation implements Runnable {
       workerThread.join();
       consumerThread.join();
     } catch (InterruptedException e) {
-      Throwables.propagate(e);
+      System.exit(1);
     }
   }
 }
