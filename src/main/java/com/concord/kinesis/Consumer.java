@@ -9,6 +9,8 @@ import java.util.List;
 import com.amazonaws.services.kinesis.model.Record;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
 import com.concord.kinesis.utils.Options;
+import com.google.common.base.Throwables;
+import com.google.common.base.Preconditions;
 
 public class Consumer extends Computation implements Runnable {
   private final ArrayBlockingQueue<Record> recordQueue;
@@ -16,6 +18,10 @@ public class Consumer extends Computation implements Runnable {
   private final String name;
 
   public Consumer(ArrayBlockingQueue<Record> rq, List<String> os, String name) {
+    Preconditions.checkNotNull(rq);
+    Preconditions.checkNotNull(os);
+    Preconditions.checkNotNull(name);
+
     recordQueue = rq;
     for (String o : os) {
       ostreams.add(o.getBytes());
@@ -51,7 +57,9 @@ public class Consumer extends Computation implements Runnable {
 
   @Override
   public void processRecord(ComputationContext ctx,
-                            com.concord.swift.Record record) {}
+                            com.concord.swift.Record record) {
+    throw new RuntimeException();
+  }
 
   @Override
   public Metadata metadata() {
@@ -94,7 +102,7 @@ public class Consumer extends Computation implements Runnable {
       workerThread.join();
       consumerThread.join();
     } catch (InterruptedException e) {
-      System.err.println("Process interrupted");
+      Throwables.propagate(e);
     }
   }
 }
