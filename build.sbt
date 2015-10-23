@@ -3,6 +3,7 @@ settings(
   name := "concord_kinesis_consumer",
   version := "0.1.0",
   scalaVersion := "2.11.6",
+  autoScalaLibrary := false,
   scalacOptions ++= Seq("-feature", "-language:higherKinds"),
   libraryDependencies ++= Seq(
     "io.concord" % "concord" % "0.1.0",
