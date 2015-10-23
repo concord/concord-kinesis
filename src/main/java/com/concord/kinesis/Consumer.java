@@ -115,7 +115,7 @@ public class Consumer extends Computation implements Runnable {
       workerThread.join();
       consumerThread.join();
     } catch(InterruptedException e) {
-      System.exit(1);
+      Throwables.propagate(e);
     }
   }
 }
