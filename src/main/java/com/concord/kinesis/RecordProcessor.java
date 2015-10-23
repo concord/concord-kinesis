@@ -10,10 +10,13 @@ import java.util.concurrent.BlockingQueue;
 import com.amazonaws.services.kinesis.clientlibrary.exceptions.*;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RecordProcessor implements IRecordProcessor {
-  private BlockingQueue<Record> recordQueue;
+  private final BlockingQueue<Record> recordQueue;
   private String shardId;
+  private final Logger logger = LoggerFactory.getLogger(RecordProcessor.class);
 
   public RecordProcessor(BlockingQueue<Record> rq) {
     recordQueue = rq;
@@ -22,7 +25,7 @@ public class RecordProcessor implements IRecordProcessor {
   @Override
   public void initialize(String shardId) {
     Preconditions.checkNotNull(shardId);
-    System.err.println("Initialized processor on shard id: " + shardId);
+    logger.info("Initialized processor on shard id: {}", shardId);
     this.shardId = shardId;
   }
 
@@ -41,7 +44,7 @@ public class RecordProcessor implements IRecordProcessor {
         Throwables.propagate(e);
       } catch (ShutdownException e) {
         // checkpointer
-        System.err.println("Shutting down kinesis consumer");
+        logger.error("Shutting down Kinesis consumer");
         break;
       }
     }
@@ -50,7 +53,7 @@ public class RecordProcessor implements IRecordProcessor {
   @Override
   public void shutdown(IRecordProcessorCheckpointer checkpointer,
                        ShutdownReason reason) {
-    System.out.println("Shutting down Kinesis consumer for shard: " + shardId);
+    logger.error("Shutting down Kinesis consumer for shard: {}", shardId);
     System.exit(1);
   }
 }

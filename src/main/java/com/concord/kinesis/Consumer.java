@@ -11,11 +11,14 @@ import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
 import com.concord.kinesis.utils.Options;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.UncaughtExceptionHandlers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Consumer extends Computation implements Runnable {
   private final ArrayBlockingQueue<Record> recordQueue;
   private final ArrayList<byte[]> ostreams = new ArrayList<byte[]>();
   private final String name;
+  private final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
   public Consumer(ArrayBlockingQueue<Record> rq, List<String> os, String name) {
     Preconditions.checkNotNull(rq);
@@ -31,6 +34,7 @@ public class Consumer extends Computation implements Runnable {
 
   @Override
   public void init(ComputationContext ctx) {
+    logger.info("Initializing computation");
     ctx.setTimer("loop", System.currentTimeMillis());
   }
 
@@ -58,6 +62,7 @@ public class Consumer extends Computation implements Runnable {
   @Override
   public void processRecord(ComputationContext ctx,
                             com.concord.swift.Record record) {
+    logger.error("Process record called on source, aborting");
     throw new RuntimeException();
   }
 
